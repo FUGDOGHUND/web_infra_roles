@@ -1,0 +1,6 @@
+---
+- name: Deploy web infrastructure
+  hosts: all
+  become: yes
+  roles:
+    - base

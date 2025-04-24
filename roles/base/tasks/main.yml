@@ -1,0 +1,37 @@
+---
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - docker.io
+    - docker-compose
+    - python3-pip
+
+- name: Install Docker Python SDK
+  pip:
+    name: docker
+
+- name: Create data directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  loop:
+    - "{{ playbook_dir }}/kafka-data"
+    - "{{ playbook_dir }}/pgdata"
+
+- name: Copy configuration files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ playbook_dir }}/"
+  loop:
+    - nginx.conf
+    - index.html
+
+- name: Start containers
+  community.docker.docker_compose:
+    project_src: "{{ playbook_dir }}"
+    build: no
+    state: present
