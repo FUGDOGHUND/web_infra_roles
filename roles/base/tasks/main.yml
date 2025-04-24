@@ -8,7 +8,7 @@
     - docker.io
     - docker-compose
     - python3-pip
-    - python3-docker  # Добавляем системный пакет
+    - python3-docker
 
 - name: Create data directories
   file:
@@ -27,8 +27,17 @@
     - nginx.conf
     - index.html
 
+- name: Clean up existing containers
+  shell: |
+    docker-compose down --remove-orphans --volumes --rmi local || true
+    docker rm -f $(docker ps -aq) || true
+  args:
+    chdir: "{{ playbook_dir }}"
+  ignore_errors: yes
+
 - name: Start containers
   community.docker.docker_compose:
     project_src: "{{ playbook_dir }}"
     build: no
     state: present
+    recreate: always
