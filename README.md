@@ -8,4 +8,4 @@
 
 ## Развёртывание:
 ```bash
-ansible-playbook -i inventory.ini deploy.yml
+sudo ansible-playbook -i inventory.ini deploy.yml
