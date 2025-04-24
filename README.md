@@ -8,7 +8,7 @@
 
 ## Развёртывание:
 ```bash
-sudo ansible-playbook -i inventory.ini deploy.yml
-
 docker-compose down --rmi all -v
 docker rm -f $(docker ps -aq) 2>/dev/null || true
+
+sudo ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
