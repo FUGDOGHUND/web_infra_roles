@@ -1,10 +1,5 @@
-- name: Find installed PHP-FPM service
-  shell: systemctl list-units --type=service --all | grep -oP 'php[\d.]+-fpm' | head -n1
-  register: php_fpm_service_name
-  changed_when: false
-
-- name: Start php-fpm
-  service:
-    name: "{{ php_fpm_service_name.stdout }}"
-    state: started
-    enabled: yes
+ - name: Create kafka-data directory
+      file:
+        path: "{{ playbook_dir }}/kafka-data"
+        state: directory
+        mode: '0755'
