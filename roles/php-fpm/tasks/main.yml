@@ -1,10 +1,14 @@
-- name: Install php-fpm
+---
+- name: Install PHP-FPM
   apt:
-    name: php-fpm
+    name: "php{{ php_version }}-fpm"
     state: present
+    update_cache: yes
+  tags: php-fpm
 
 - name: Start php-fpm
   service:
-    name: "{{ php_fpm_service }}"
+    name: "php{{ php_version }}-fpm"
     state: started
     enabled: yes
+  tags: php-fpm

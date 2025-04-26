@@ -6,3 +6,7 @@
     - postgresql
     - kafka
     - zookeeper
+    - geerlingguy.php
+    vars:
+      php_version: "8.2"
+      php_enable_php_fpm: true
