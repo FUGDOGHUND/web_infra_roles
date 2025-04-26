@@ -1,0 +1,2 @@
+- name: Install Zookeeper (пример через Docker)
+  shell: docker pull wurstmeister/zookeeper

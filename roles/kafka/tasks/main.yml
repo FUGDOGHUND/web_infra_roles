@@ -1,0 +1,2 @@
+- name: Install Kafka (пример через Docker)
+  shell: docker pull wurstmeister/kafka
