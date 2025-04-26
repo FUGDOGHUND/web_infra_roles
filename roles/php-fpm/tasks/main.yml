@@ -5,6 +5,6 @@
 
 - name: Start php-fpm
   service:
-    name: php7.4-fpm
+    name: "{{ php_fpm_service }}"
     state: started
     enabled: yes
