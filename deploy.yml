@@ -1,34 +1,30 @@
 - hosts: all
   become: yes
+  gather_facts: yes
+
+  vars:
+    php_version: "8.2"
+    php_enable_php_fpm: true
+    php_fpm_pools:
+      - name: www
+        listen: "/run/php/php8.2-fpm.sock"
+        user: "www-data"
+        group: "www-data"
+        pm: "dynamic"
+        pm_max_children: 50
+        pm_start_servers: 5
+        pm_min_spare_servers: 5
+        pm_max_spare_servers: 15
+
   pre_tasks:
-    - name: Add PHP repository (for Ubuntu < 22.04)
+    - name: Add PHP repository
       apt_repository:
         repo: "ppa:ondrej/php"
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version | version_compare('22.04', '<')
-      tags: php
+      when: ansible_distribution == 'Ubuntu'
 
   roles:
-    # База данных и очереди должны быть установлены первыми
-    - role: zookeeper
-      tags: zookeeper
-    
-    - role: kafka
-      tags: kafka
-      vars:
-        kafka_zookeeper_uri: "localhost:2181"
-    
-    - role: postgresql
-      tags: postgresql
-    
-    # Установка PHP и зависимостей
     - role: geerlingguy.php
-      tags: php
-      vars:
-        php_version: "8.2"
-        php_enable_php_fpm: true
-        php_fpm_pools:
-          - "www"
-    
-    # Веб-сервер устанавливается после PHP
-    - role: nginx
-      tags: nginx
+    - nginx
+    - postgresql
+    - kafka
+    - zookeeper
