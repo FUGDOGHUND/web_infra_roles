@@ -1,12 +1,34 @@
 - hosts: all
   become: yes
+  pre_tasks:
+    - name: Add PHP repository (for Ubuntu < 22.04)
+      apt_repository:
+        repo: "ppa:ondrej/php"
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version | version_compare('22.04', '<')
+      tags: php
+
   roles:
-    - nginx
-    - php-fpm
-    - postgresql
-    - kafka
-    - zookeeper
-    - geerlingguy.php
-    vars:
-      php_version: "8.2"
-      php_enable_php_fpm: true
+    # База данных и очереди должны быть установлены первыми
+    - role: zookeeper
+      tags: zookeeper
+    
+    - role: kafka
+      tags: kafka
+      vars:
+        kafka_zookeeper_uri: "localhost:2181"
+    
+    - role: postgresql
+      tags: postgresql
+    
+    # Установка PHP и зависимостей
+    - role: geerlingguy.php
+      tags: php
+      vars:
+        php_version: "8.2"
+        php_enable_php_fpm: true
+        php_fpm_pools:
+          - "www"
+    
+    # Веб-сервер устанавливается после PHP
+    - role: nginx
+      tags: nginx
