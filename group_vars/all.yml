@@ -1,0 +1,4 @@
+nginx_port: 80
+php_version: "8.1"
+postgres_version: "15"
+kafka_version: "3.6.0"

@@ -1,0 +1,6 @@
+---
+- name: Run PHP-FPM container
+  community.docker.docker_container:
+    name: php-fpm
+    image: php:{{ php_version }}-fpm
+    state: started

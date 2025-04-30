@@ -1,0 +1,11 @@
+---
+- name: Deploy full infrastructure
+  hosts: localhost
+  connection: local
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - nginx
+    - php
+    - postgres
+    - kafka

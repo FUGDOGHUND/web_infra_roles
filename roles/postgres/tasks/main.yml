@@ -1,0 +1,12 @@
+---
+- name: Run PostgreSQL container
+  community.docker.docker_container:
+    name: postgres
+    image: postgres:{{ postgres_version }}
+    env:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "pass"
+      POSTGRES_DB: "appdb"
+    ports:
+      - "5432:5432"
+    state: started
